@@ -27,8 +27,7 @@ alert m = executeFile "zenity" True
 -- Use this function for battery messages because boilerplate.
 batteryAlert :: Float -> IO ()
 batteryAlert a
-    | a < 0.05 = alert $ message 5
-    | a < 0.1 = alert $ message 10
+    | a < 0.1 = alert $ message $ floor $ a * 100
     | otherwise = return ()
 
 main = do
@@ -37,4 +36,4 @@ main = do
     let a = read $ unwords $ words c :: Float
     let b = read $ unwords $ words f :: Float
     let d = a / b
-    batteryAlert a
+    batteryAlert d
