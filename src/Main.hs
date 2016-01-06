@@ -20,6 +20,7 @@ alert m = executeFile "zenity" True
                 , show alertTimeout
                 , "--warning"
                 , "--text"
+                , "--display=:0.0"
                 , m
                 ]
                 Nothing
@@ -27,7 +28,7 @@ alert m = executeFile "zenity" True
 -- Use this function for battery messages because boilerplate.
 batteryAlert :: Float -> IO ()
 batteryAlert a
-    | a < 0.1 = alert $ message $ floor $ a * 100
+    | a < 1.0 = alert $ message $ floor $ a * 100
     | otherwise = return ()
 
 main = do

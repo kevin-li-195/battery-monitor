@@ -10,3 +10,16 @@ Run the built binary in a cron job every couple of minutes, and an alert will ap
 I'm planning on implementing a way for the battery monitor to check whether the user has already been delivered a notification because as of now, every X minutes (depending on your cron job configuration) you'll receive a notification if your battery is below a certain percentage.
 
 Also planning on making the addition of the binary to the crontab less annoying because configuring cronjobs is annoying.
+
+Crontab fixes
+-----
+
+Typically crontab can't access the X display. Thus, add:
+    
+    xhost local:[your username here without brackets] > /dev/null
+
+to your .bashrc.
+
+For example, I would add:
+    
+    xhost local:chokboy > /dev/null
