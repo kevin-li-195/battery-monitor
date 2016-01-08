@@ -5,7 +5,7 @@ import System.IO.Error
 import System.Posix.Files
 import System.Posix.Process
 
--- Edit below according to the location of your
+-- | Edit below according to the location of your
 -- battery charge information and
 -- the desire timeout of the message.
 currentPath = "/sys/class/power_supply/BATC/charge_now" :: FilePath
@@ -15,13 +15,13 @@ allowAlertPath = (++) <$> getEnv "HOME" <*> return "/.battery-monitorinfo" :: IO
 alertThreshold = 1 :: Float
 alertTimeout = 5 :: Int
 
--- Called when alert appears to prevent alert from appearing again if charge is still below threshold.
+-- | Called when alert appears to prevent alert from appearing again if charge is still below threshold.
 writeAllowAlert :: Bool -> IO ()
 writeAllowAlert a
     | a == True = allowAlertPath >>= (\p -> writeFile p "1")
     | a == False = allowAlertPath >>= (\p -> writeFile p "0")
 
--- Checks the current threshold file setting to determine whether an alert should be instantiated.
+-- | Checks the current threshold file setting to determine whether an alert should be instantiated.
 readAllowAlert :: IO Bool
 readAllowAlert = do
     result <- tryIOError $ allowAlertPath >>= readFile >>= readIO
@@ -37,11 +37,11 @@ readAllowAlert = do
             writeAllowAlert True
             return True
 
--- Produces message given a percentage of battery remaining.
+-- | Produces message given a percentage of battery remaining.
 message :: Int -> String
 message a = "Battery:\n\n" ++ show a ++ "% remaining."
 
--- Makes a alert using Zenity according to the string given.
+-- | Makes a alert using Zenity according to the string given.
 alert :: String -> IO ()
 alert m = executeFile "zenity" True
                 [ "--timeout"
@@ -53,7 +53,7 @@ alert m = executeFile "zenity" True
                 ]
                 Nothing
 
--- Use this function for battery messages because boilerplate.
+-- | Use this function for battery messages because boilerplate.
 -- This function will alert at any level and then set allowAlert to False.
 batteryAlert :: Float -> IO ()
 batteryAlert a = do
