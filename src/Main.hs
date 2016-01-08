@@ -1,8 +1,11 @@
+import Control.Concurrent
 import Control.Exception
+import Control.Monad
 import Data.Char
 import System.Environment
 import System.IO.Error
 import System.Posix.Files
+import System.Posix.Types
 import System.Posix.Process
 
 -- | Edit below according to the location of your
@@ -12,7 +15,7 @@ currentPath = "/sys/class/power_supply/BATC/charge_now" :: FilePath
 fullPath = "/sys/class/power_supply/BATC/charge_full" :: FilePath
 -- allowAlertPath provides the $HOME/.battery-monitorinfo file path.
 allowAlertPath = (++) <$> getEnv "HOME" <*> return "/.battery-monitorinfo" :: IO String
-alertThreshold = 1 :: Float
+alertThreshold = 0.1 :: Float
 alertTimeout = 5 :: Int
 
 -- | Called when alert appears to prevent alert from appearing again if charge is still below threshold.
@@ -27,13 +30,11 @@ readAllowAlert = do
     result <- tryIOError $ allowAlertPath >>= readFile >>= readIO
     case result of
         Right a -> do
-            putStrLn "omg works"
             if a == 1 then
                 return True
             else
                 return False
         Left a -> do
-            putStrLn $ show a
             writeAllowAlert True
             return True
 
@@ -57,10 +58,12 @@ alert m = executeFile "zenity" True
 -- This function will alert at any level and then set allowAlert to False.
 batteryAlert :: Float -> IO ()
 batteryAlert a = do
-    alert $ message $ floor $ a * 100
     writeAllowAlert False
+    forkProcess $ alert . message . floor $ a * 100
+    return ()
 
-main = do
+main = forever $ do
+    threadDelay 60000000
     c <- readFile currentPath
     f <- readFile fullPath
     let a = read $ unwords $ words c :: Float
@@ -75,9 +78,9 @@ main = do
             -- charge is below the alert threshold.
             if d < alertThreshold then do
                 batteryAlert d
-            else
+            else do
                 return ()
-        False ->
+        False -> do
             -- If we do not alert, then we check if we are above the alert threshold.
             -- That way, we'll be able to re-allow alerts when we go back above the
             -- alert threshold.
