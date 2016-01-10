@@ -14,12 +14,12 @@ TODO: Obtain battery file location from command line argument and save the locat
 ~~Crontab fixes~~
 -----
 
-~~Typically crontab can't access the X display. Thus, add:
+~~Typically crontab can't access the X display. Thus, add:~~
     
-    xhost local:[your username here without brackets] > /dev/null
+    ~~xhost local:[your username here without brackets] > /dev/null~~
 
 ~~to your .bashrc.~~
 
 ~~For example, I would add:~~
     
-    xhost local:chokboy > /dev/null
+    ~~xhost local:chokboy > /dev/null~~
