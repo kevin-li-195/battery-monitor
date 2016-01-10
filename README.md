@@ -11,15 +11,15 @@ Currently, the .battery-monitorinfo file generated in your home directory is use
 
 TODO: Obtain battery file location from command line argument and save the location in ~/.battery-monitorinfo.
 
-~~Crontab fixes~~
+~~Crontab fixes (Deprecated, do not use)~~
 -----
 
 ~~Typically crontab can't access the X display. Thus, add:~~
     
-    ~~xhost local:[your username here without brackets] > /dev/null~~
+    xhost local:[your username here without brackets] > /dev/null
 
 ~~to your .bashrc.~~
 
 ~~For example, I would add:~~
     
-    ~~xhost local:chokboy > /dev/null~~
+    xhost local:chokboy > /dev/null
