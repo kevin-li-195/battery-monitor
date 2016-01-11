@@ -9,6 +9,8 @@ Run battery-monitor on startup. Running it without any arguments will result in 
 
 Currently, the .battery-monitorinfo file generated in your home directory is used for preventing alerts from being generated when an alert has already generated and the charge is still below the alert threshold.
 
+Requires Zenity.
+
 TODO: Obtain battery file location from command line argument and save the location in ~/.battery-monitorinfo.
 
 ~~Crontab fixes (Deprecated, do not use)~~
