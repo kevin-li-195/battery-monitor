@@ -106,6 +106,7 @@ daemon threshold = forever $ do
             if d > threshold then writeAllowAlert True
             else return ()
 
+-- | Handler function will take care of command line mistakes.
 handler :: [Float] -> IO ()
 handler [] = do
     putStrLn "Running battery-monitor daemon with 10% alert threshold."
@@ -119,7 +120,7 @@ handler [a] = do
 handler (x:xs) = usage
 
 main = do
-    arg <- tryIOError $ getArgs >>= (mapM readIO)
-    case arg of
-        Left a -> usage
+    args <- tryIOError $ getArgs >>= (mapM readIO)
+    case args of
+        Left a -> (putStrLn $ show a) >> usage
         Right a -> handler a
